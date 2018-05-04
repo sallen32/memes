@@ -59,7 +59,9 @@ void passenger_request(int passenger, int from_floor, int to_floor,
 		pthread_mutex_lock(&lock);
 		
 		for(i = 0; i<ELEVATORS; i++){
-		if(elev[i].current_floor == from_floor && elev[i].state == ELEVATOR_OPEN && elev[i].occupancy==0) {
+		if(elev[i].current_floor == from_floor && elev[i].state == ELEVATOR_OPEN && elev[i].occupancy==0 &&
+			((( elev[i].direction>=0==(to_floor-from_floor)>=0 ) || (elev[i].direction<=0 == (to_floor-from_floor)<=0 )) || from_floor == 0 || from_floor == FLOORS-1) 
+		) {
 			enter(passenger, i);
 			elev[i].occupancy++;
 			waiting=0;
@@ -68,7 +70,7 @@ void passenger_request(int passenger, int from_floor, int to_floor,
 		}
 		
 		pthread_mutex_unlock(&lock);
-		pthread_barrier_wait(&barrier);
+	//	pthread_barrier_wait(&barrier);
 	}
 
 	// wait for the elevator at our destination floor, then get out
@@ -85,7 +87,7 @@ void passenger_request(int passenger, int from_floor, int to_floor,
 	
 
 		pthread_mutex_unlock(&lock);
-		pthread_barrier_wait(&barrier);
+	//	pthread_barrier_wait(&barrier);
 	}
 }
 
@@ -96,7 +98,7 @@ void elevator_ready(int elevator, int at_floor,
 //	pthread_barrier_wait(&barrier);
 //	if(elevator!=0) return;
 	
-	pthread_barrier_wait(&barrier);
+//	pthread_barrier_wait(&barrier);
 	
 //	pthread_mutex_lock(&lock);
 
